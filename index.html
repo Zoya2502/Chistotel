@@ -21,15 +21,15 @@
         </div>
     </section>
 
-    <!-- === ЭКРАН 2: НОВЕЛЛА (Стиль "Кинолента") === -->
+    <!-- === ЭКРАН 2: НОВЕЛЛА === -->
     <section id="novel-screen" class="screen">
-        
-        <!-- ВЕРХНЯЯ ЧАСТЬ: ВИЗУАЛ -->
         <div class="visual-block">
-            <!-- Фон сцены -->
+            <!-- Обычный фон (для диалогов) -->
             <div class="background-layer" id="novel-bg"></div>
             
-            <!-- Слой для CG (Глаза) -->
+            <!-- ДЛЯ CG (ГЛАЗА): Размытый фон (Амбиент) -->
+            <div id="cg-blur" class="ambient-bg hidden"></div>
+            <!-- ДЛЯ CG (ГЛАЗА): Четкая картинка -->
             <img id="cg-layer" class="cg-image hidden" src="" alt="CG">
             
             <!-- Персонажи -->
@@ -39,15 +39,9 @@
             </div>
         </div>
 
-        <!-- НИЖНЯЯ ЧАСТЬ: ТЕКСТ -->
         <div class="text-block" id="dialogue-box">
-            <!-- Имя (сделаем маленьким и аккуратным) -->
-            <div class="name-tag" id="speaker-name"></div>
-            
-            <!-- Текст -->
+            <div class="name-tag" id="speaker-name">Имя</div>
             <p class="text-content" id="speech-text">...</p>
-            
-            <!-- Стрелки навигации по центру -->
             <div class="nav-arrows">
                 <span class="active-arrow">>></span>
             </div>
@@ -56,79 +50,75 @@
 
     <!-- === ЭКРАН 3: ИГРА === -->
     <section id="game-screen" class="screen">
+        <!-- 1. Размытый фон на весь экран (заполняет пустоты) -->
+        <div class="game-bg-blur"></div>
+        <!-- 2. Четкая сцена по центру -->
+        <div class="game-bg-sharp"></div>
+
         <div class="game-stage">
             
             <div class="reel-window" id="reel-window">
                 <div class="reel-strip" id="reel-strip">
-                <!-- ТЕПЕРЬ КРУТЯТСЯ ТОЛЬКО ФОРМОЧКИ -->
-                <!-- Используем gacha_btn.png, так как это формочка -->
-                <img src="img/gacha_btn.png" alt="Form">
-                <img src="img/gacha_btn.png" alt="Form">
-                <img src="img/gacha_btn.png" alt="Form">
-                <img src="img/gacha_btn.png" alt="Form">
-                <img src="img/gacha_btn.png" alt="Form">
-                <img src="img/gacha_btn.png" alt="Form">
-                <!-- Дублируем побольше, чтобы лента казалась длинной -->
-                <img src="img/gacha_btn.png" alt="Form">
-                <img src="img/gacha_btn.png" alt="Form">
-            </div>
-            </div>
-
-            <div id="result-display" class="hidden">
-                <div class="side-char left-char">
-                    <img src="img/funny_char_1.png" alt="Blue">
+                     <!-- ФОРМОЧКИ -->
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
+                    <img src="img/gacha_btn.png" alt="Form">
                 </div>
-                
-                <div class="main-prize">
-                    <!-- Вращающиеся лучи света (Фон) -->
-                    <div class="god-rays"></div>
-                    
-                    <!-- Свечение позади -->
-                    <div class="glow-bg"></div>
+            </div>
 
-                    <!-- Сам кот -->
-                    <img src="img/result_cat.png" alt="Winner" class="winner-img">
-                    
-                    <!-- Искры/Конфетти (Поверх) -->
+            <!-- ... Дальше без изменений (результат, кнопка) ... -->
+             <div id="result-display" class="hidden">
+                <div class="side-char left-char"><img src="img/funny_char_1.png"></div>
+                <div class="main-prize">
+                    <div class="god-rays"></div>
+                    <div class="glow-bg"></div>
+                    <img src="img/result_cat.png" class="winner-img">
                     <div class="particles">
-                        <div class="p p1"></div>
-                        <div class="p p2"></div>
-                        <div class="p p3"></div>
-                        <div class="p p4"></div>
-                        <div class="p p5"></div>
-                        <div class="p p6"></div>
-                        <div class="p p7"></div>
-                        <div class="p p8"></div>
+                        <div class="p p1"></div><div class="p p2"></div><div class="p p3"></div><div class="p p4"></div>
+                        <div class="p p5"></div><div class="p p6"></div><div class="p p7"></div><div class="p p8"></div>
                     </div>
                 </div>
-
-                <div class="side-char right-char">
-                    <img src="img/funny_char_2.png" alt="Yellow">
-                </div>
-            </div>
-            <!-- ... -->
-
-            <div id="result-display" class="hidden">
-                <div class="side-char left-char">
-                    <img src="img/funny_char_1.png" alt="Blue">
-                </div>
-                <div class="main-prize">
-                    <img src="img/result_cat.png" alt="Winner">
-                </div>
-                <div class="side-char right-char">
-                    <img src="img/funny_char_2.png" alt="Yellow">
-                </div>
+                <div class="side-char right-char"><img src="img/funny_char_2.png"></div>
             </div>
 
             <div class="gacha-controls" id="gacha-controls">
                 <button id="gacha-btn" class="bounce-btn">
-                    <img src="img/gacha_btn.png" alt="Крутка">
+                    <img src="img/gacha_btn.png">
                 </button>
                 <div class="btn-label">Сделать Крутку</div>
             </div>
+
         </div>
     </section>
 
     <script src="script.js"></script>
+    <!-- ... твой код ... -->
+    <script src="script.js"></script>
+
+    <!-- НОВЫЙ БЛОК: Заглушка с просьбой повернуть экран -->
+    <div id="orientation-overlay">
+        <div class="orientation-content">
+            <img src="img/rotate-icon.png" alt="Поверните устройство">
+            <p>Пожалуйста, поверните устройство<br>для лучшего опыта</p>
+        </div>
+    </div>
+
+</body>
+</html>
 </body>
 </html>

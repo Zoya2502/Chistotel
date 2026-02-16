@@ -16,54 +16,44 @@ body {
 
 /* === БАЗОВЫЕ НАСТРОЙКИ ЭКРАНОВ === */
 .screen {
-    display: none; /* Скрыто по умолчанию */
+    display: none; /* Скрыто по умолчанию - ЭТО САМОЕ ВАЖНОЕ */
     position: relative;
     width: 100%;
-    max-width: 900px;
+    /* Для Меню и Новеллы оставляем "книжный" формат */
+    max-width: 900px; 
     height: 100%;
     background: #000;
     overflow: hidden;
     box-shadow: 0 0 50px rgba(0,0,0,0.5);
 }
 
-/* Показываем экран ТОЛЬКО если есть класс active */
+/* Показываем ТОЛЬКО если есть класс active */
 .screen.active {
     display: flex;
     flex-direction: column;
 }
 
-/* === МЕНЮ === */
+/* === 1. МЕНЮ === */
 #menu-screen {
-    /* Если экран активен, он будет flex, но нам нужно переопределить направление для меню */
-    flex-direction: column; 
-    
     background: url('img/header_bg.jpg') no-repeat center center;
     background-size: cover;
-    justify-content: flex-end; /* Контент внизу */
+    justify-content: flex-end;
     align-items: center;
 }
 
-/* Затемнение фона */
 #menu-screen::before {
     content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    z-index: 0;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); z-index: 0;
 }
 
 .bubbles-container {
-    position: absolute;
-    width: 100%; height: 100%;
-    top: 0; left: 0;
-    pointer-events: none;
-    z-index: 1;
+    position: absolute; width: 100%; height: 100%;
+    top: 0; left: 0; pointer-events: none; z-index: 1;
 }
 
 .bubble {
-    position: absolute;
-    bottom: -50px;
-    border-radius: 50%;
+    position: absolute; bottom: -50px; border-radius: 50%;
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
     animation: floatUp linear infinite;
 }
@@ -76,115 +66,97 @@ body {
 }
 
 .menu-content {
-    z-index: 2;
-    text-align: center;
-    margin-bottom: 100px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
+    z-index: 2; text-align: center; margin-bottom: 100px;
+    display: flex; flex-direction: column; align-items: center; gap: 30px;
 }
 
 .main-title {
-    font-family: 'Cinzel', serif;
-    font-size: 3rem;
-    color: #f0f0f0;
+    font-family: 'Cinzel', serif; font-size: 3rem; color: #f0f0f0;
     text-shadow: 0 0 10px #000, 0 0 20px rgba(100, 149, 237, 0.5);
-    letter-spacing: 5px;
-    margin: 0;
-    opacity: 0.9;
+    letter-spacing: 5px; margin: 0; opacity: 0.9;
 }
 
 .ghost-btn {
-    padding: 15px 50px;
-    font-size: 1.2rem;
-    font-family: 'Cinzel', serif;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    color: #fff;
-    cursor: pointer;
-    transition: all 0.5s ease;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+    padding: 15px 50px; font-size: 1.2rem; font-family: 'Cinzel', serif;
+    background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #fff; cursor: pointer; transition: all 0.5s ease;
+    text-transform: uppercase; letter-spacing: 3px;
 }
-
 .ghost-btn:hover {
-    background: #fff;
-    color: #000;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    background: #fff; color: #000; box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
-/* === НОВЕЛЛА === */
-/* ВАЖНО: Убрали отсюда display: flex, теперь он берется из .screen.active */
-
-/* 1. Верхний блок (Визуал) */
+/* === 2. НОВЕЛЛА === */
 .visual-block {
-    position: relative;
-    flex: 65; /* 65% высоты */
-    width: 100%;
-    overflow: hidden;
-    background: #000;
+    position: relative; flex: 65; width: 100%;
+    overflow: hidden; background: #000;
 }
 
 .background-layer {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-size: cover;
-    background-position: center;
-    transition: opacity 0.5s ease;
-    z-index: 1;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    transition: opacity 0.5s ease; z-index: 1;
 }
 
+/* Размытый фон для CG (Ambient) */
+.ambient-bg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover; background-position: center;
+    filter: blur(15px) brightness(0.6); transform: scale(1.1);
+    z-index: 5; transition: opacity 1.5s ease; opacity: 0;
+}
+.ambient-bg.visible { opacity: 1; }
+.ambient-bg.fading-out { opacity: 0; }
+
+/* Четкая картинка CG */
 .cg-image {
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    object-fit: contain;
-    background-color: #000;
-    z-index: 6;
-    transition: opacity 0.5s ease;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: contain; z-index: 6;
+    transition: opacity 1.5s ease; opacity: 0;
 }
-.cg-image.hidden { display: none; opacity: 0; }
+.cg-image.visible { opacity: 1; }
+.cg-image.fading-out { opacity: 0; filter: brightness(0.5); }
 
+/* Персонажи */
 .characters-container {
-    position: absolute;
-    bottom: 0;
-    left: 0; width: 100%; height: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    pointer-events: none;
-    z-index: 5;
-    padding: 0 2%;
-    box-sizing: border-box;
+    position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    pointer-events: none; z-index: 7; padding: 0 2%; box-sizing: border-box;
 }
-
-.characters-container.solo-mode {
-    justify-content: center;
-}
+.characters-container.solo-mode { justify-content: center; }
 
 .character {
-    height: 90%;
-    width: auto;
-    object-fit: contain;
-    transition: all 0.5s ease;
-    filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
+    height: 90%; width: auto; object-fit: contain;
+    transition: all 0.5s ease; filter: drop-shadow(0 0 15px rgba(0,0,0,0.8));
+    animation: breathe 3s ease-in-out infinite; transform-origin: bottom center;
 }
 .character.hidden { display: none; }
-
 #char-left { transform: scaleX(-1); }
+#char-right { animation: floatGhost 4s ease-in-out infinite; }
 
-/* 2. Нижний блок (Текст) */
+@keyframes breathe {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.02) translateY(-5px); }
+}
+@keyframes floatGhost {
+    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+    50% { transform: translateY(-15px) scale(1.02); filter: brightness(1.2); }
+}
+
+/* Текст */
+/* === Текстовый блок со скроллом (НОВЫЙ КОД) === */
 .text-block {
-    flex: 35; /* 35% высоты */
+    flex: 35; /* Занимает 35% экрана */
     background: #111;
     border-top: 1px solid #333;
     padding: 20px 40px;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+    
+    /* ГЛАВНЫЕ ИЗМЕНЕНИЯ: */
+    display: flex;           /* Включаем Flexbox */
+    flex-direction: column;  /* Дети будут в столбик */
+    overflow: hidden;        /* Прячем всё, что не влезло */
+
     cursor: pointer;
     position: relative;
     color: #ccc;
@@ -192,455 +164,288 @@ body {
 }
 
 .name-tag {
-    font-family: 'Cinzel', serif;
-    font-weight: bold;
-    font-size: 1rem;
-    color: #6495ED;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    flex-shrink: 0; /* Запрещаем имени сжиматься */
+    text-align: center; /* Имя оставляем по центру */
 }
 
 .text-content {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: #eee;
-    margin: 0;
-    max-width: 800px;
+    flex-grow: 1; /* Разрешаем тексту расти и занимать всё свободное место */
+    overflow-y: auto; /* Показываем скролл ТОЛЬКО если текст не влезает */
+    text-align: left; /* Длинный текст лучше читать с выравниванием по левому краю */
+    
+    margin-top: 15px;
+    margin-bottom: 15px;
+    padding-right: 15px; /* Небольшой отступ справа, чтобы текст не прилипал к скроллбару */
 }
 
 .nav-arrows {
-    margin-top: 15px;
-    font-family: 'Cinzel', serif;
-    font-size: 1.5rem;
-    color: #555;
-    letter-spacing: 5px;
-}
-
-.active-arrow {
-    color: #fff;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; text-shadow: 0 0 10px white; }
-    100% { opacity: 0.5; }
-}
-
-/* === ИГРА (Новый стиль) === */
-#game-screen {
-    /* ЦЕНТР: Фон теперь ровно посередине */
-    background: url('img/stage_bg.jpg') no-repeat center center; 
-    background-size: contain; 
-    background-color: #000;
-    
-    /* Это оставляем для кнопки */
-    justify-content: flex-end; 
-    align-items: center;
-}
-
-.game-stage {
+    flex-shrink: 0; /* Запрещаем стрелкам сжиматься */
+    text-align: center;
     width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-end;
-    position: relative;
 }
 
-/* Окно с крутящимися персонажами */
+/* === Красивый скроллбар для темной темы === */
+.text-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.text-content::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.text-content::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.text-content::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+.name-tag {
+    font-family: 'Cinzel', serif; font-weight: bold; font-size: 1rem;
+    color: #6495ED; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;
+}
+.text-content {
+    font-size: 1.1rem; line-height: 1.6; color: #eee; margin: 0; max-width: 800px;
+}
+.nav-arrows {
+    margin-top: 15px; font-family: 'Cinzel', serif; font-size: 1.5rem; color: #555; letter-spacing: 5px;
+}
+.active-arrow { color: #fff; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; text-shadow: 0 0 10px white; } 100% { opacity: 0.5; } }
+
+
+/* === 3. ИГРА (ПОЛНЫЙ ЭКРАН - ИСПРАВЛЕНИЕ) === */
+#game-screen {
+    /* Снимаем ограничения ширины */
+    max-width: none !important; 
+    width: 100vw; height: 100vh;
+    background: #000; position: relative; overflow: hidden;
+    
+    /* УДАЛИЛ display: flex отсюда, чтобы он не перебивал скрытие! */
+    justify-content: center; align-items: center;
+}
+
+/* Когда игра АКТИВНА, тогда включаем flex */
+#game-screen.active {
+    display: flex;
+}
+
+/* Размытый фон */
+.game-bg-blur {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: url('img/stage_bg.jpg') no-repeat center center;
+    background-size: cover;
+    filter: blur(20px) brightness(0.5); transform: scale(1.1); z-index: 0;
+}
+
+/* Четкая сцена */
+.game-bg-sharp {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 100%; height: 100%; max-width: 1200px;
+    background: url('img/stage_bg.jpg') no-repeat center center;
+    background-size: contain; z-index: 1;
+}
+
+/* Игровая зона */
+.game-stage {
+    position: relative; width: 100%; height: 100%; max-width: 1200px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    padding-bottom: 20px; z-index: 2;
+}
+
+/* Крутилка */
+/* === Крутилка (ИСПРАВЛЕННЫЙ ВАРИАНТ) === */
+
 .reel-window {
     position: absolute;
-    /* Убираем bottom, ставим центр */
-    top: 50%;
-    transform: translateY(-50%); /* Сдвиг ровно на середину */
-    
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
     height: 200px;
     overflow: hidden;
     display: flex;
     align-items: center;
+    justify-content: center;
     z-index: 5;
-    background: transparent; 
+    background: transparent;
 }
 
+/* Лента просто существует, БЕЗ анимации по умолчанию */
 .reel-strip {
     display: flex;
     position: absolute;
     left: 0;
+    /* Анимация отсюда убрана! */
 }
 .reel-strip img {
     height: 160px;
     margin: 0 30px;
 }
 
+/* Анимация вращения (без изменений) */
 @keyframes spinReel {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); } 
+    100% { transform: translateX(-50%); }
 }
-.spinning .reel-strip {
+
+/* НОВОЕ ПРАВИЛО: Анимация включается ТОЛЬКО КОГДА у .reel-window есть класс .spinning */
+.reel-window.spinning .reel-strip {
     animation: spinReel 0.4s linear infinite;
 }
 
-/* Блок с результатом */
+/* Результат */
 #result-display {
-    position: absolute;
-    /* Убираем bottom, ставим центр */
-    top: 50%;
-    /* -40% чуть опускает их вниз относительно центра, чтобы встали на пол сцены */
-    transform: translateY(-40%); 
-    
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 30px;
-    z-index: 10;
+    position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);
+    width: 100%; display: flex; justify-content: center; align-items: flex-end;
+    gap: 30px; z-index: 10;
 }
-.side-char img {
-    height: 150px;
-    width: auto;
-    filter: drop-shadow(0 0 5px #aaa);
-    animation: happyJump 1s infinite alternate;
-}
-.right-char img {
-    animation-delay: 0.2s;
-}
-.main-prize img {
-    height: 300px;
-    width: auto;
-    filter: drop-shadow(0 0 20px white);
-    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    position: relative; /* Добавлено */
-    z-index: 1; /* Добавлено, чтобы быть выше фейерверка */
-}
+.side-char img { height: 150px; width: auto; filter: drop-shadow(0 0 5px #aaa); animation: happyJump 1s infinite alternate; }
+.right-char img { animation-delay: 0.2s; }
+@keyframes happyJump { 0% { transform: translateY(0) rotate(-5deg); } 100% { transform: translateY(-20px) rotate(5deg); } }
 
-@keyframes popIn {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-@keyframes happyJump {
-    0% { transform: translateY(0) rotate(-5deg); }
-    100% { transform: translateY(-20px) rotate(5deg); }
-}
-
-/* Управление гачей */
-.gacha-controls {
-    text-align: center;
-    z-index: 20;
-    margin-bottom: 40px;
-    transition: opacity 1s;
-}
-#gacha-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.1s;
-    outline: none;
-}
-#gacha-btn:active {
-    transform: scale(0.9);
-}
-#gacha-btn img {
-    width: 130px;
-    /* Убрали серый фильтр, чтобы кнопка была яркой */
-}
-
-/* НОВАЯ КРАСИВАЯ КНОПКА */
-.btn-label {
-    background: rgba(10, 10, 10, 0.75); /* Полупрозрачный темный фон */
-    color: #f0f0f0; /* Яркий текст */
-    padding: 10px 30px; /* Отступы */
-    border-radius: 25px; /* Скругление */
-    margin-top: -15px; /* Наложение на иконку */
-    position: relative;
-    font-family: 'Cinzel', serif; /* Используем тот же красивый шрифт */
-    font-size: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Тонкая светлая рамка */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5); /* Тень для объема */
-    backdrop-filter: blur(4px); /* Красивое размытие фона под кнопкой */
-    -webkit-backdrop-filter: blur(4px); /* Для Safari */
-}
-
-/* === АНИМАЦИЯ ФЕЙЕРВЕРКА (Добавить в конец секции ИГРЫ) === */
-
-.fireworks-effect {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 2px;
-    height: 2px;
-    z-index: -1; /* Позади главного приза */
-}
-
-.spark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: gold;
-    box-shadow: 0 0 10px gold, 0 0 20px #fff;
-    /* Анимация будет добавлена, когда появится результат */
-}
-
-/* Когда #result-display становится видимым, запускаем анимацию искр */
-#result-display:not(.hidden) .spark {
-    animation: explode 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-@keyframes explode {
-    0% {
-        transform: scale(0.5);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 0;
-    }
-}
-
-/* Каждой искре даем свое направление и задержку */
-.spark:nth-child(1) { transform: rotate(0deg) translateY(-150px); animation-delay: 0.05s; }
-.spark:nth-child(2) { transform: rotate(45deg) translateY(-150px); animation-delay: 0.1s; }
-.spark:nth-child(3) { transform: rotate(90deg) translateY(-150px); animation-delay: 0.15s; }
-.spark:nth-child(4) { transform: rotate(135deg) translateY(-150px); animation-delay: 0.2s; }
-.spark:nth-child(5) { transform: rotate(180deg) translateY(-150px); animation-delay: 0.25s; }
-.spark:nth-child(6) { transform: rotate(225deg) translateY(-150px); animation-delay: 0.3s; }
-.spark:nth-child(7) { transform: rotate(270deg) translateY(-150px); animation-delay: 0.35s; }
-.spark:nth-child(8) { transform: rotate(315deg) translateY(-150px); animation-delay: 0.4s; }
-
-/* ЯДЕРНЫЙ ВАРИАНТ СКРЫТИЯ - ВСТАВИТЬ В САМЫЙ КОНЕЦ ФАЙЛА CSS */
-.hidden {
-    display: none !important;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-}
-
-/* === ЭПИЧНОЕ ВЫПАДЕНИЕ (НОВЫЙ СТИЛЬ) === */
-
-/* Контейнер приза */
+/* ЭПИЧНЫЙ ПРИЗ */
 .main-prize {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 300px; /* Фиксируем размер контейнера */
-    height: 300px;
+    position: relative; display: flex; justify-content: center; align-items: center;
+    width: 300px; height: 300px;
 }
-
-/* 1. САМ КОТ */
 .winner-img {
-    height: 300px;
-    width: auto;
-    position: relative;
-    z-index: 10; /* Кот на переднем плане */
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); /* Золотая тень */
+    height: 300px; width: auto; position: relative; z-index: 10;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
     animation: popInElastic 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-/* Эластичное появление (Прыг!) */
 @keyframes popInElastic {
     0% { transform: scale(0); opacity: 0; }
     60% { transform: scale(1.2); opacity: 1; }
     100% { transform: scale(1); opacity: 1; }
 }
 
-/* 2. БОЖЕСТВЕННЫЕ ЛУЧИ (Крутятся сзади) */
 .god-rays {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px; height: 600px; /* Большие лучи */
-    background: repeating-conic-gradient(
-        from 0deg,
-        rgba(255, 223, 128, 0.2) 0deg 20deg,
-        transparent 20deg 40deg
-    );
-    border-radius: 50%;
-    z-index: 1; /* Позади кота */
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 600px; border-radius: 50%; z-index: 1; opacity: 0;
+    background: repeating-conic-gradient(from 0deg, rgba(255, 223, 128, 0.2) 0deg 20deg, transparent 20deg 40deg);
     animation: rotateRays 10s linear infinite;
-    opacity: 0; /* Скрыты по умолчанию */
 }
+#result-display:not(.hidden) .god-rays { opacity: 1; transition: opacity 0.5s ease-in; }
+@keyframes rotateRays { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-/* Показываем лучи, когда родитель (result-display) виден */
-#result-display:not(.hidden) .god-rays {
-    opacity: 1;
-    transition: opacity 0.5s ease-in;
-}
-
-@keyframes rotateRays {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* 3. СВЕЧЕНИЕ (Центральное пятно света) */
 .glow-bg {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px; height: 200px;
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 200px; height: 200px; z-index: 2;
     background: radial-gradient(circle, rgba(255, 255, 200, 0.8) 0%, transparent 70%);
-    z-index: 2;
     animation: pulseGlow 2s infinite alternate;
 }
+@keyframes pulseGlow { from { transform: translate(-50%, -50%) scale(1); } to { transform: translate(-50%, -50%) scale(1.5); } }
 
-@keyframes pulseGlow {
-    from { transform: translate(-50%, -50%) scale(1); }
-    to { transform: translate(-50%, -50%) scale(1.5); }
+.particles { position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 15; }
+.p { position: absolute; width: 8px; height: 8px; background: gold; border-radius: 50%; box-shadow: 0 0 10px #fff; opacity: 0; }
+#result-display:not(.hidden) .p { animation: explodeParticles 1s ease-out forwards; }
+@keyframes explodeParticles { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: var(--dir) scale(0); opacity: 0; } }
+.p1 { --dir: translate(-100px, -100px); } .p2 { --dir: translate(0px, -150px); } .p3 { --dir: translate(100px, -100px); }
+.p4 { --dir: translate(150px, 0px); } .p5 { --dir: translate(100px, 100px); } .p6 { --dir: translate(0px, 150px); }
+.p7 { --dir: translate(-100px, 100px); } .p8 { --dir: translate(-150px, 0px); }
+
+
+/* Кнопка */
+.gacha-controls { text-align: center; z-index: 20; margin-bottom: 40px; transition: opacity 1s; }
+#gacha-btn { background: none; border: none; cursor: pointer; transition: transform 0.1s; outline: none; }
+#gacha-btn:active { transform: scale(0.9); }
+#gacha-btn img { width: 130px; }
+.btn-label {
+    background: rgba(10, 10, 10, 0.75); color: #f0f0f0; padding: 10px 30px; border-radius: 25px;
+    margin-top: -15px; position: relative; font-family: 'Cinzel', serif; font-size: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px);
 }
 
-/* 4. ИСКРЫ (Разлетаются) */
-.particles {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    z-index: 15; /* Поверх всего */
-}
-
-.p {
-    position: absolute;
-    width: 8px; height: 8px;
-    background: gold;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #fff;
-    opacity: 0;
-}
-
-/* Анимация взрыва искр */
-#result-display:not(.hidden) .p {
-    animation: explodeParticles 1s ease-out forwards;
-}
-
-@keyframes explodeParticles {
-    0% { transform: translate(0, 0) scale(1); opacity: 1; }
-    100% { transform: var(--dir) scale(0); opacity: 0; }
-}
-
-/* Направления для каждой искры */
-.p1 { --dir: translate(-100px, -100px); }
-.p2 { --dir: translate(0px, -150px); }
-.p3 { --dir: translate(100px, -100px); }
-.p4 { --dir: translate(150px, 0px); }
-.p5 { --dir: translate(100px, 100px); }
-.p6 { --dir: translate(0px, 150px); }
-.p7 { --dir: translate(-100px, 100px); }
-.p8 { --dir: translate(-150px, 0px); }
-
-
-/* =========================================
-   1. ОЖИВЛЕНИЕ ПЕРСОНАЖЕЙ (АНИМАЦИИ)
-   ========================================= */
-
-/* Легкое дыхание для персонажей */
-.character {
-    /* Добавляем анимацию дыхания */
-    animation: breathe 3s ease-in-out infinite;
-    transform-origin: bottom center;
-}
-
-/* Пушица (дух) может парить чуть активнее */
-#char-right {
-    animation: floatGhost 4s ease-in-out infinite;
-}
-
-@keyframes breathe {
-    0%, 100% { transform: scale(1) translateY(0); }
-    50% { transform: scale(1.02) translateY(-5px); } /* Чуть увеличивается и всплывает */
-}
-
-@keyframes floatGhost {
-    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
-    50% { transform: translateY(-15px) scale(1.02); filter: brightness(1.2); } /* Сильнее плавает и светится */
-}
-
-/* Плавное появление/затухание для ГЛАЗ (CG) */
-.cg-image {
-    transition: opacity 1.5s ease-in-out; /* Медленное проявление (1.5 сек) */
-    opacity: 0;
-}
-.cg-image.visible {
-    opacity: 1; /* Полная видимость */
-}
-.cg-image.fading-out {
-    opacity: 0; /* Уход в затемнение */
-    filter: brightness(0.5); /* Дополнительно темнеет */
-}
-
-
-/* =========================================
-   2. МОБИЛЬНАЯ АДАПТАЦИЯ (САМОЕ СТРАШНОЕ)
-   ========================================= */
-
-/* Этот блок срабатывает ТОЛЬКО на телефонах (ширина меньше 768px) */
+/* === АДАПТИВ (ТЕЛЕФОНЫ) === */
 @media (max-width: 768px) {
+    .main-title { font-size: 1.8rem; padding: 0 20px; }
+    .ghost-btn { padding: 12px 30px; font-size: 1rem; }
 
-    /* --- МЕНЮ --- */
-    .main-title {
-        font-size: 1.8rem; /* Уменьшаем заголовок */
-        padding: 0 20px;
-    }
-    .ghost-btn {
-        padding: 12px 30px;
-        font-size: 1rem;
-    }
+    .visual-block { flex: 60; }
+    .text-block { flex: 40; padding: 15px; }
+    .text-content { font-size: 0.95rem; }
+    .characters-container { align-items: flex-end; }
+    .character { height: 80%; max-width: 45%; }
 
-    /* --- НОВЕЛЛА --- */
-    /* Меняем пропорции: больше места картинке, меньше тексту */
-    .visual-block { flex: 60; } 
-    .text-block { 
-        flex: 40; 
-        padding: 15px; 
-    }
+    #game-screen { background-size: cover; background-position: center bottom; }
+    #result-display { width: 100%; transform: translateY(-50%) scale(0.65); gap: 10px; }
     
-    .text-content {
-        font-size: 0.95rem; /* Текст чуть мельче */
-    }
-    
-    .characters-container {
-        align-items: flex-end; /* Прижимаем к низу картинки */
-    }
-    
-    .character {
-        height: 80%; /* Персонажи чуть меньше, чтобы влезали */
-        max-width: 45%; /* Чтобы не наезжали друг на друга */
-    }
+    .main-prize { width: 200px; height: 200px; }
+    .winner-img { height: 200px; }
+    .god-rays { width: 300px; height: 300px; }
+    .side-char img { height: 100px; }
+    .gacha-controls { margin-bottom: 20px; transform: scale(0.9); }
+}
 
-    /* --- ИГРА --- */
-    #game-screen {
-        background-size: cover; /* На телефоне лучше cover, чтобы не было черных полос сверху/снизу */
-        background-position: center bottom;
-    }
+/* ЯДЕРНЫЙ ВАРИАНТ СКРЫТИЯ (В КОНЦЕ) */
+.hidden {
+    display: none !important; opacity: 0 !important;
+    visibility: hidden !important; pointer-events: none !important;
+}
 
-    /* Масштабируем сцену результата */
-    #result-display {
-        width: 100%;
-        transform: translateY(-20%) scale(0.7); /* Уменьшаем всю сцену с котами до 70% */
-        gap: 10px; /* Ближе друг к другу */
+/* =========================================
+   ЗАГЛУШКА ДЛЯ ПОВОРОТА ЭКРАНА
+   ========================================= */
+
+#orientation-overlay {
+    position: fixed; /* Поверх всего */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95); /* Почти непрозрачный фон */
+    z-index: 9999; /* Выше всех элементов */
+    
+    /* Центрируем содержимое */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* По умолчанию скрыта */
+    display: none; 
+}
+
+.orientation-content {
+    text-align: center;
+    color: #fff;
+    font-family: 'Cinzel', serif;
+}
+
+.orientation-content img {
+    width: 80px;
+    height: 80px;
+    opacity: 0.8;
+    animation: rotateHint 2s ease-in-out infinite;
+}
+
+.orientation-content p {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+}
+
+/* Анимация иконки */
+@keyframes rotateHint {
+    0% { transform: rotate(0deg); }
+    40% { transform: rotate(0deg); }
+    50% { transform: rotate(-90deg); }
+    90% { transform: rotate(-90deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* МАГИЯ: Показываем заглушку ТОЛЬКО на телефонах в ПОРТРЕТНОЙ (вертикальной) ориентации */
+@media (orientation: portrait) and (max-width: 896px) {
+    #game-screen.active {
+        /* Прячем саму игру, чтобы не мешала */
+        display: none !important; 
     }
     
-    .main-prize {
-        width: 200px; height: 200px; /* Уменьшаем контейнер приза */
-    }
-    .winner-img {
-        height: 200px; /* Уменьшаем кота */
-    }
-    .god-rays {
-        width: 300px; height: 300px; /* Уменьшаем лучи */
-    }
-    
-    /* Боковые персонажи */
-    .side-char img {
-        height: 100px;
-    }
-    
-    /* Опускаем кнопку ниже */
-    .gacha-controls {
-        margin-bottom: 20px;
-        transform: scale(0.9);
+    #orientation-overlay {
+        /* Показываем нашу заглушку */
+        display: flex; 
     }
 }

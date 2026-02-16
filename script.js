@@ -5,7 +5,7 @@ function createBubbles() {
     const container = document.getElementById('bubbles');
     const colors = [
         '#ffffff', // Белый (звезды)
-        '#7b8fa3', // Серый (город)
+        '#7b8fa3', // Серый (город/луна)
         '#aebcd1', // Лунный голубой
         '#2b3a42'  // Темный акцент
     ]; 
@@ -93,7 +93,8 @@ const gameScreen = document.getElementById('game-screen');
 
 // Элементы новеллы
 const bgLayer = document.getElementById('novel-bg');
-const cgLayer = document.getElementById('cg-layer');
+const cgLayer = document.getElementById('cg-layer'); // Четкая картинка
+const cgBlur = document.getElementById('cg-blur');   // Размытый фон
 const charLeft = document.getElementById('char-left');
 const charRight = document.getElementById('char-right');
 const speakerName = document.getElementById('speaker-name');
@@ -112,9 +113,13 @@ dialogueBox.addEventListener('click', () => {
     // ПРОВЕРКА: Если это последний слайд (с глазами)
     if (currentSlide === slides.length - 1) {
         
-        // 1. Запускаем анимацию затемнения
-        cgLayer.classList.remove('visible'); // Убираем видимость (начинает исчезать)
-        cgLayer.classList.add('fading-out'); // Добавляем класс для затемнения
+        // 1. Запускаем анимацию затемнения (Fade Out)
+        // Убираем класс visible и добавляем fading-out для обоих слоев
+        cgLayer.classList.remove('visible');
+        cgBlur.classList.remove('visible');
+        
+        cgLayer.classList.add('fading-out');
+        cgBlur.classList.add('fading-out');
         
         // 2. Ждем 1.5 секунды (время анимации в CSS), потом переключаем на игру
         setTimeout(() => {
@@ -139,22 +144,30 @@ function renderSlide(index) {
     speakerName.innerText = data.speaker;
     speechText.innerText = data.text;
     
-    // ЛОГИКА ФОНА И CG (Картинки с глазами)
+    // ЛОГИКА ФОНА И CG (Картинки с глазами + Размытый фон)
     if (data.isCG) {
-        // Устанавливаем картинку
+        // Устанавливаем картинки
         cgLayer.src = data.bg;
+        cgBlur.style.backgroundImage = `url('${data.bg}')`;
+        
+        // Убираем скрытие
         cgLayer.classList.remove('hidden');
+        cgBlur.classList.remove('hidden');
         
         // Небольшая задержка, чтобы браузер успел отрисовать, а потом плавно показал
         setTimeout(() => {
-            cgLayer.classList.add('visible'); // Плавное появление (opacity 0 -> 1)
+            cgLayer.classList.add('visible'); // Плавное появление
+            cgBlur.classList.add('visible');  // Плавное появление фона
         }, 50);
         
         bgLayer.style.opacity = 0; // Скрываем обычный фон
     } else {
-        // Обычный слайд
+        // Если обычный слайд - скрываем CG слои
         cgLayer.classList.remove('visible');
+        cgBlur.classList.remove('visible');
+        
         cgLayer.classList.add('hidden');
+        cgBlur.classList.add('hidden');
         
         bgLayer.style.opacity = 1;
         bgLayer.style.backgroundImage = `url('${data.bg}')`;
