@@ -10,12 +10,8 @@
 
     <!-- === ЭКРАН 1: МЕНЮ === -->
     <section id="menu-screen" class="screen active">
-        <!-- Фон с пузырьками -->
         <div class="bubbles-container" id="bubbles"></div>
-        
         <div class="menu-content">
-            <!-- Заголовок можно убрать, если он есть на картинке фона, 
-                 но я оставлю его скрытым или аккуратным -->
             <h1 class="main-title">История одного сна</h1>
             <button id="start-btn" class="ghost-btn">Приподнять занавес</button>
         </div>
@@ -24,21 +20,14 @@
     <!-- === ЭКРАН 2: НОВЕЛЛА === -->
     <section id="novel-screen" class="screen">
         <div class="visual-block">
-            <!-- Обычный фон (для диалогов) -->
             <div class="background-layer" id="novel-bg"></div>
-            
-            <!-- ДЛЯ CG (ГЛАЗА): Размытый фон (Амбиент) -->
             <div id="cg-blur" class="ambient-bg hidden"></div>
-            <!-- ДЛЯ CG (ГЛАЗА): Четкая картинка -->
             <img id="cg-layer" class="cg-image hidden" src="" alt="CG">
-            
-            <!-- Персонажи -->
             <div class="characters-container">
                 <img src="img/chistotel.png" id="char-left" class="character hidden">
                 <img src="img/pushitsa.png" id="char-right" class="character hidden">
             </div>
         </div>
-
         <div class="text-block" id="dialogue-box">
             <div class="name-tag" id="speaker-name">Имя</div>
             <p class="text-content" id="speech-text">...</p>
@@ -50,43 +39,21 @@
 
     <!-- === ЭКРАН 3: ИГРА === -->
     <section id="game-screen" class="screen">
-        <!-- 1. Размытый фон на весь экран (заполняет пустоты) -->
         <div class="game-bg-blur"></div>
-        <!-- 2. Четкая сцена по центру -->
         <div class="game-bg-sharp"></div>
-
         <div class="game-stage">
-            
             <div class="reel-window" id="reel-window">
                 <div class="reel-strip" id="reel-strip">
-                     <!-- ФОРМОЧКИ -->
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
-                    <img src="img/gacha_btn.png" alt="Form">
+                    <!-- Заполни этот блок картинками gacha_btn.png как делала раньше -->
+                    <img src="img/gacha_btn.png"><img src="img/gacha_btn.png"><img src="img/gacha_btn.png"><img src="img/gacha_btn.png">
+                    <img src="img/gacha_btn.png"><img src="img/gacha_btn.png"><img src="img/gacha_btn.png"><img src="img/gacha_btn.png">
+                    <img src="img/gacha_btn.png"><img src="img/gacha_btn.png"><img src="img/gacha_btn.png"><img src="img/gacha_btn.png">
                 </div>
             </div>
-
-            <!-- ... Дальше без изменений (результат, кнопка) ... -->
              <div id="result-display" class="hidden">
                 <div class="side-char left-char"><img src="img/funny_char_1.png"></div>
                 <div class="main-prize">
-                    <div class="god-rays"></div>
-                    <div class="glow-bg"></div>
+                    <div class="god-rays"></div><div class="glow-bg"></div>
                     <img src="img/result_cat.png" class="winner-img">
                     <div class="particles">
                         <div class="p p1"></div><div class="p p2"></div><div class="p p3"></div><div class="p p4"></div>
@@ -95,30 +62,27 @@
                 </div>
                 <div class="side-char right-char"><img src="img/funny_char_2.png"></div>
             </div>
-
             <div class="gacha-controls" id="gacha-controls">
-                <button id="gacha-btn" class="bounce-btn">
-                    <img src="img/gacha_btn.png">
-                </button>
+                <button id="gacha-btn" class="bounce-btn"><img src="img/gacha_btn.png"></button>
                 <div class="btn-label">Сделать Крутку</div>
             </div>
-
         </div>
     </section>
 
-    <script src="script.js"></script>
-    <!-- ... твой код ... -->
-    <script src="script.js"></script>
-
-    <!-- НОВЫЙ БЛОК: Заглушка с просьбой повернуть экран -->
+    <!-- ПОВОРОТ ЭКРАНА -->
     <div id="orientation-overlay">
         <div class="orientation-content">
-            <img src="img/rotate-icon.png" alt="Поверните устройство">
-            <p>Пожалуйста, поверните устройство<br>для лучшего опыта</p>
+            <img src="img/rotate-icon.png">
+            <p>Пожалуйста, поверните устройство</p>
         </div>
     </div>
 
-</body>
-</html>
+    <!-- АУДИО (ВАЖНО: проверь расширение файлов в папке audio!) -->
+    <audio id="novel-theme" src="audio/novel-theme.ogg" loop></audio>
+    <audio id="game-theme" src="audio/game-theme.ogg" loop></audio>
+    <audio id="drumroll-sfx" src="audio/drumroll.ogg"></audio>
+    <audio id="win-fanfare-sfx" src="audio/win-fanfare.ogg"></audio>
+
+    <script src="script.js"></script>
 </body>
 </html>

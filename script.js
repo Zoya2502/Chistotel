@@ -1,46 +1,4 @@
-// ==========================================
-// 1. ПУЗЫРЬКИ ДЛЯ МЕНЮ (КОСМИЧЕСКАЯ ПАЛИТРА)
-// ==========================================
-function createBubbles() {
-    const container = document.getElementById('bubbles');
-    const colors = [
-        '#ffffff', // Белый (звезды)
-        '#7b8fa3', // Серый (город/луна)
-        '#aebcd1', // Лунный голубой
-        '#2b3a42'  // Темный акцент
-    ]; 
-    const bubbleCount = 30;
-
-    for (let i = 0; i < bubbleCount; i++) {
-        const bubble = document.createElement('div');
-        bubble.classList.add('bubble');
-        
-        // Рандомный размер (от 5 до 25px)
-        const size = Math.random() * 20 + 5; 
-        bubble.style.width = `${size}px`;
-        bubble.style.height = `${size}px`;
-        
-        // Рандомный цвет и позиция
-        bubble.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        bubble.style.left = `${Math.random() * 100}%`;
-        
-        // Прозрачность для глубины
-        bubble.style.opacity = Math.random() * 0.5 + 0.1;
-        
-        // Скорость анимации
-        bubble.style.animationDuration = `${Math.random() * 10 + 10}s`; 
-        bubble.style.animationDelay = `${Math.random() * 5}s`;
-        
-        container.appendChild(bubble);
-    }
-}
-// Запускаем создание пузырьков
-createBubbles();
-
-
-// ==========================================
-// 2. ДАННЫЕ НОВЕЛЛЫ (СЦЕНАРИЙ)
-// ==========================================
+// --- 1. ДАННЫЕ НОВЕЛЛЫ ---
 const slides = [
     {
         speaker: "ПУШИЦА",
@@ -74,181 +32,158 @@ const slides = [
         speaker: "",
         text: "Свет сияния постепенно тускнеет. Чистотел открывает глаза - перед ним настоящий снег и ночное небо. А рядом, на снегу, сидит Пушица. Он улыбается, сон и явь слились в одно мгновение",
         bg: "img/eyes_bg.jpg",
-        isCG: true, // Флаг: это специальная картинка
+        isCG: true,
         showLeft: false,
         showRight: false
     }
 ];
 
-
-// ==========================================
-// 3. ЛОГИКА НОВЕЛЛЫ
-// ==========================================
+// --- 2. ЭЛЕМЕНТЫ И ЗВУК ---
 let currentSlide = 0;
+let clickCount = 0;
 
-// Экраны
-const menuScreen = document.getElementById('menu-screen');
-const novelScreen = document.getElementById('novel-screen');
-const gameScreen = document.getElementById('game-screen');
+const novelTheme = document.getElementById('novel-theme');
+const gameTheme = document.getElementById('game-theme');
+const drumrollSfx = document.getElementById('drumroll-sfx');
+const winFanfareSfx = document.getElementById('win-fanfare-sfx');
 
-// Элементы новеллы
-const bgLayer = document.getElementById('novel-bg');
-const cgLayer = document.getElementById('cg-layer'); // Четкая картинка
-const cgBlur = document.getElementById('cg-blur');   // Размытый фон
-const charLeft = document.getElementById('char-left');
-const charRight = document.getElementById('char-right');
-const speakerName = document.getElementById('speaker-name');
-const speechText = document.getElementById('speech-text');
-const dialogueBox = document.getElementById('dialogue-box');
+// Базовая настройка громкости
+if (novelTheme) novelTheme.volume = 0.4;
+if (gameTheme) gameTheme.volume = 0.4;
+if (drumrollSfx) drumrollSfx.volume = 0.6;
+if (winFanfareSfx) winFanfareSfx.volume = 0.7;
 
-// --- Старт из Меню ---
-document.getElementById('start-btn').addEventListener('click', () => {
-    menuScreen.classList.remove('active');
-    novelScreen.classList.add('active');
-    renderSlide(0);
-});
+// Универсальная функция плавного затухания
+function fadeOut(audio) {
+    if (!audio || audio.paused) return;
+    let vol = audio.volume;
+    const interval = setInterval(() => {
+        if (vol > 0.05) {
+            vol -= 0.05;
+            audio.volume = vol;
+        } else {
+            clearInterval(interval);
+            audio.pause();
+            audio.currentTime = 0;
+            audio.volume = 0.4; // Возвращаем громкость для будущего использования
+        }
+    }, 150);
+}
 
-// --- Клик по Диалогу (Переход дальше) ---
-dialogueBox.addEventListener('click', () => {
-    // ПРОВЕРКА: Если это последний слайд (с глазами)
-    if (currentSlide === slides.length - 1) {
-        
-        // 1. Запускаем анимацию затемнения (Fade Out)
-        // Убираем класс visible и добавляем fading-out для обоих слоев
-        cgLayer.classList.remove('visible');
-        cgBlur.classList.remove('visible');
-        
-        cgLayer.classList.add('fading-out');
-        cgBlur.classList.add('fading-out');
-        
-        // 2. Ждем 1.5 секунды (время анимации в CSS), потом переключаем на игру
-        setTimeout(() => {
-            startMiniGame();
-        }, 1500);
-        
-        return; // Останавливаем выполнение, чтобы не сработал код ниже
-    }
-
-    // Обычный переход к следующему слайду
-    currentSlide++;
-    if (currentSlide < slides.length) {
-        renderSlide(currentSlide);
-    }
-});
-
-// --- Функция отрисовки слайда ---
+// --- 3. ЛОГИКА НОВЕЛЛЫ ---
 function renderSlide(index) {
     const data = slides[index];
+    document.getElementById('speaker-name').innerText = data.speaker;
+    document.getElementById('speech-text').innerText = data.text;
     
-    // Текст
-    speakerName.innerText = data.speaker;
-    speechText.innerText = data.text;
-    
-    // ЛОГИКА ФОНА И CG (Картинки с глазами + Размытый фон)
+    const cgLayer = document.getElementById('cg-layer');
+    const cgBlur = document.getElementById('cg-blur');
+    const bgLayer = document.getElementById('novel-bg');
+
     if (data.isCG) {
-        // Устанавливаем картинки
         cgLayer.src = data.bg;
         cgBlur.style.backgroundImage = `url('${data.bg}')`;
-        
-        // Убираем скрытие
         cgLayer.classList.remove('hidden');
         cgBlur.classList.remove('hidden');
-        
-        // Небольшая задержка, чтобы браузер успел отрисовать, а потом плавно показал
-        setTimeout(() => {
-            cgLayer.classList.add('visible'); // Плавное появление
-            cgBlur.classList.add('visible');  // Плавное появление фона
-        }, 50);
-        
-        bgLayer.style.opacity = 0; // Скрываем обычный фон
+        setTimeout(() => { cgLayer.classList.add('visible'); cgBlur.classList.add('visible'); }, 50);
+        bgLayer.style.opacity = 0;
     } else {
-        // Если обычный слайд - скрываем CG слои
-        cgLayer.classList.remove('visible');
-        cgBlur.classList.remove('visible');
-        
         cgLayer.classList.add('hidden');
-        cgBlur.classList.add('hidden');
-        
         bgLayer.style.opacity = 1;
         bgLayer.style.backgroundImage = `url('${data.bg}')`;
     }
-    
-    // ЛОГИКА ПЕРСОНАЖЕЙ
-    const leftIsVisible = data.showLeft;
-    const rightIsVisible = data.showRight;
-    
-    if (leftIsVisible) charLeft.classList.remove('hidden');
-    else charLeft.classList.add('hidden');
-    
-    if (rightIsVisible) charRight.classList.remove('hidden');
-    else charRight.classList.add('hidden');
 
-    // Центрирование (если персонаж один)
-    const container = document.querySelector('.characters-container');
-    if ((leftIsVisible && !rightIsVisible) || (!leftIsVisible && rightIsVisible)) {
-        container.classList.add('solo-mode');
-    } else {
-        container.classList.remove('solo-mode');
+    const left = document.getElementById('char-left');
+    const right = document.getElementById('char-right');
+    if (data.showLeft) left.classList.remove('hidden'); else left.classList.add('hidden');
+    if (data.showRight) right.classList.remove('hidden'); else right.classList.add('hidden');
+}
+
+// Кнопка Старт в меню
+document.getElementById('start-btn').addEventListener('click', () => {
+    document.getElementById('menu-screen').classList.remove('active');
+    document.getElementById('novel-screen').classList.add('active');
+    renderSlide(0);
+    if(novelTheme) novelTheme.play().catch(e => console.error("Звук заблокирован:", e));
+});
+
+// Клик по тексту (переход)
+document.getElementById('dialogue-box').addEventListener('click', () => {
+    if (currentSlide === slides.length - 1) {
+        // Переход в игру
+        document.getElementById('cg-layer').classList.remove('visible');
+        document.getElementById('cg-blur').classList.remove('visible');
+        fadeOut(novelTheme);
+        setTimeout(startMiniGame, 1500);
+        return;
+    }
+    currentSlide++;
+    renderSlide(currentSlide);
+});
+
+// --- 4. ЛОГИКА ИГРЫ ---
+function startMiniGame() {
+    document.getElementById('novel-screen').classList.remove('active');
+    document.getElementById('game-screen').classList.add('active');
+    
+    // Включаем музыку игры
+    if (gameTheme) {
+        gameTheme.currentTime = 0;
+        gameTheme.play().catch(e => console.error("Не удалось запустить музыку игры:", e));
     }
 }
 
-
-// ==========================================
-// 4. ЛОГИКА МИНИ-ИГРЫ
-// ==========================================
-let clickCount = 0;
-const gachaBtn = document.getElementById('gacha-btn');
-const reelWindow = document.getElementById('reel-window');
-const resultDisplay = document.getElementById('result-display');
-const controls = document.getElementById('gacha-controls');
-
-function startMiniGame() {
-    novelScreen.classList.remove('active');
-    gameScreen.classList.add('active');
-    
-    // СТРАХОВКА: Принудительно прячем результат и показываем ленту при старте
-    // Чтобы не было накладок, если вдруг CSS не сработал
-    resultDisplay.classList.add('hidden');
-    reelWindow.classList.remove('hidden');
-}
-
-// Клик по кнопке "Крутить"
-gachaBtn.addEventListener('click', () => {
+document.getElementById('gacha-btn').addEventListener('click', () => {
     if (clickCount >= 3) return;
-
     clickCount++;
     
-    // Эффект нажатия (кнопка чуть уменьшается)
-    gachaBtn.style.transform = "scale(0.9)";
-    setTimeout(()=> gachaBtn.style.transform = "scale(1)", 100);
+    // Анимация кнопки
+    const btn = document.getElementById('gacha-btn');
+    btn.style.transform = "scale(0.9)";
+    setTimeout(() => btn.style.transform = "scale(1)", 100);
 
     if (clickCount === 3) {
-        runGachaSequence();
+        // Процесс выбивания
+        document.getElementById('gacha-controls').style.opacity = '0';
+        document.getElementById('reel-window').classList.add('spinning');
+        
+        // Включаем дробь (музыка игры НЕ выключается)
+        if (drumrollSfx) {
+            drumrollSfx.currentTime = 0;
+            drumrollSfx.play().catch(e => {});
+        }
+        
+        setTimeout(() => {
+            // ФИНАЛ: персонаж выпал
+            document.getElementById('reel-window').classList.add('hidden');
+            document.getElementById('result-display').classList.remove('hidden');
+
+            // Останавливаем дробь мгновенно
+            if (drumrollSfx) {
+                drumrollSfx.pause();
+                drumrollSfx.currentTime = 0;
+            }
+
+            // Включаем победные фанфары
+            if (winFanfareSfx) {
+                winFanfareSfx.currentTime = 0;
+                winFanfareSfx.play().catch(e => console.error("Ошибка фанфар:", e));
+            }
+        }, 2500);
     }
 });
 
-function runGachaSequence() {
-    // 1. Убираем кнопку управления
-    controls.style.opacity = '0';
-    gachaBtn.style.cursor = 'default';
-    
-    // 2. ГАРАНТИЯ: Лента видна, Результат скрыт
-    reelWindow.classList.remove('hidden');
-    resultDisplay.classList.add('hidden'); 
-    
-    // 3. Запускаем анимацию вращения
-    reelWindow.classList.add('spinning');
-    
-    // 4. Ждем 2.5 секунды
-    setTimeout(() => {
-        // РЕЗКАЯ СМЕНА (чтобы избежать накладок)
-        
-        // Прячем ленту
-        reelWindow.classList.add('hidden');
-        reelWindow.classList.remove('spinning');
-        
-        // Показываем результат (запустится анимация фейерверка в CSS)
-        resultDisplay.classList.remove('hidden');
-        
-    }, 2500);
-}
+// Пузырьки
+(function createBubbles() {
+    const container = document.getElementById('bubbles');
+    if(!container) return;
+    for (let i = 0; i < 25; i++) {
+        const b = document.createElement('div');
+        b.className = 'bubble';
+        b.style.left = Math.random() * 100 + '%';
+        b.style.width = b.style.height = Math.random() * 15 + 5 + 'px';
+        b.style.animationDuration = Math.random() * 10 + 7 + 's';
+        b.style.backgroundColor = ['#fff', '#7b8fa3', '#aebcd1'][Math.floor(Math.random()*3)];
+        container.appendChild(b);
+    }
+})();
