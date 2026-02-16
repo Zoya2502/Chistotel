@@ -420,3 +420,113 @@ body {
     visibility: hidden !important;
     pointer-events: none !important;
 }
+
+/* === ЭПИЧНОЕ ВЫПАДЕНИЕ (НОВЫЙ СТИЛЬ) === */
+
+/* Контейнер приза */
+.main-prize {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px; /* Фиксируем размер контейнера */
+    height: 300px;
+}
+
+/* 1. САМ КОТ */
+.winner-img {
+    height: 300px;
+    width: auto;
+    position: relative;
+    z-index: 10; /* Кот на переднем плане */
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); /* Золотая тень */
+    animation: popInElastic 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Эластичное появление (Прыг!) */
+@keyframes popInElastic {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* 2. БОЖЕСТВЕННЫЕ ЛУЧИ (Крутятся сзади) */
+.god-rays {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px; /* Большие лучи */
+    background: repeating-conic-gradient(
+        from 0deg,
+        rgba(255, 223, 128, 0.2) 0deg 20deg,
+        transparent 20deg 40deg
+    );
+    border-radius: 50%;
+    z-index: 1; /* Позади кота */
+    animation: rotateRays 10s linear infinite;
+    opacity: 0; /* Скрыты по умолчанию */
+}
+
+/* Показываем лучи, когда родитель (result-display) виден */
+#result-display:not(.hidden) .god-rays {
+    opacity: 1;
+    transition: opacity 0.5s ease-in;
+}
+
+@keyframes rotateRays {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 3. СВЕЧЕНИЕ (Центральное пятно света) */
+.glow-bg {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255, 255, 200, 0.8) 0%, transparent 70%);
+    z-index: 2;
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    from { transform: translate(-50%, -50%) scale(1); }
+    to { transform: translate(-50%, -50%) scale(1.5); }
+}
+
+/* 4. ИСКРЫ (Разлетаются) */
+.particles {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 0; height: 0;
+    z-index: 15; /* Поверх всего */
+}
+
+.p {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: gold;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #fff;
+    opacity: 0;
+}
+
+/* Анимация взрыва искр */
+#result-display:not(.hidden) .p {
+    animation: explodeParticles 1s ease-out forwards;
+}
+
+@keyframes explodeParticles {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: var(--dir) scale(0); opacity: 0; }
+}
+
+/* Направления для каждой искры */
+.p1 { --dir: translate(-100px, -100px); }
+.p2 { --dir: translate(0px, -150px); }
+.p3 { --dir: translate(100px, -100px); }
+.p4 { --dir: translate(150px, 0px); }
+.p5 { --dir: translate(100px, 100px); }
+.p6 { --dir: translate(0px, 150px); }
+.p7 { --dir: translate(-100px, 100px); }
+.p8 { --dir: translate(-150px, 0px); }

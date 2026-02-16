@@ -49,7 +49,6 @@
             
             <!-- Стрелки навигации по центру -->
             <div class="nav-arrows">
-                <span><<</span>
                 <span class="active-arrow">>></span>
             </div>
         </div>
@@ -61,13 +60,18 @@
             
             <div class="reel-window" id="reel-window">
                 <div class="reel-strip" id="reel-strip">
-                    <img src="img/funny_char_1.png">
-                    <img src="img/funny_char_2.png">
-                    <img src="img/funny_char_1.png">
-                    <img src="img/funny_char_2.png">
-                    <img src="img/funny_char_1.png">
-                    <img src="img/funny_char_2.png">
-                </div>
+                <!-- ТЕПЕРЬ КРУТЯТСЯ ТОЛЬКО ФОРМОЧКИ -->
+                <!-- Используем gacha_btn.png, так как это формочка -->
+                <img src="img/gacha_btn.png" alt="Form">
+                <img src="img/gacha_btn.png" alt="Form">
+                <img src="img/gacha_btn.png" alt="Form">
+                <img src="img/gacha_btn.png" alt="Form">
+                <img src="img/gacha_btn.png" alt="Form">
+                <img src="img/gacha_btn.png" alt="Form">
+                <!-- Дублируем побольше, чтобы лента казалась длинной -->
+                <img src="img/gacha_btn.png" alt="Form">
+                <img src="img/gacha_btn.png" alt="Form">
+            </div>
             </div>
 
             <div id="result-display" class="hidden">
@@ -76,19 +80,25 @@
                 </div>
                 
                 <div class="main-prize">
-                    <!-- ВЫПАВШИЙ ПЕРСОНАЖ -->
-                    <img src="img/result_cat.png" alt="Winner">
+                    <!-- Вращающиеся лучи света (Фон) -->
+                    <div class="god-rays"></div>
                     
-                    <!-- НОВОЕ: КОНТЕЙНЕР ДЛЯ ФЕЙЕРВЕРКА -->
-                    <div class="fireworks-effect">
-                        <div class="spark"></div>
-                        <div class="spark"></div>
-                        <div class="spark"></div>
-                        <div class="spark"></div>
-                        <div class="spark"></div>
-                        <div class="spark"></div>
-                        <div class="spark"></div>
-                        <div class="spark"></div>
+                    <!-- Свечение позади -->
+                    <div class="glow-bg"></div>
+
+                    <!-- Сам кот -->
+                    <img src="img/result_cat.png" alt="Winner" class="winner-img">
+                    
+                    <!-- Искры/Конфетти (Поверх) -->
+                    <div class="particles">
+                        <div class="p p1"></div>
+                        <div class="p p2"></div>
+                        <div class="p p3"></div>
+                        <div class="p p4"></div>
+                        <div class="p p5"></div>
+                        <div class="p p6"></div>
+                        <div class="p p7"></div>
+                        <div class="p p8"></div>
                     </div>
                 </div>
 
