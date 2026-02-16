@@ -1,9 +1,11 @@
-// --- 1. ПУЗЫРЬКИ (ПАЛИТРА НУАР/КОСМОС) ---
+// ==========================================
+// 1. ПУЗЫРЬКИ ДЛЯ МЕНЮ (КОСМИЧЕСКАЯ ПАЛИТРА)
+// ==========================================
 function createBubbles() {
     const container = document.getElementById('bubbles');
     const colors = [
-        '#ffffff', // Чистый белый (звезды/свет)
-        '#7b8fa3', // Серый шифер (город)
+        '#ffffff', // Белый (звезды)
+        '#7b8fa3', // Серый (город)
         '#aebcd1', // Лунный голубой
         '#2b3a42'  // Темный акцент
     ]; 
@@ -13,26 +15,32 @@ function createBubbles() {
         const bubble = document.createElement('div');
         bubble.classList.add('bubble');
         
-        // Размер поменьше, как пылинки или далекие огни
+        // Рандомный размер (от 5 до 25px)
         const size = Math.random() * 20 + 5; 
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         
+        // Рандомный цвет и позиция
         bubble.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         bubble.style.left = `${Math.random() * 100}%`;
         
-        // Разная прозрачность для глубины
+        // Прозрачность для глубины
         bubble.style.opacity = Math.random() * 0.5 + 0.1;
         
-        bubble.style.animationDuration = `${Math.random() * 10 + 10}s`; // Очень медленно
+        // Скорость анимации
+        bubble.style.animationDuration = `${Math.random() * 10 + 10}s`; 
         bubble.style.animationDelay = `${Math.random() * 5}s`;
         
         container.appendChild(bubble);
     }
 }
+// Запускаем создание пузырьков
 createBubbles();
 
-// --- 2. ДАННЫЕ НОВЕЛЛЫ ---
+
+// ==========================================
+// 2. ДАННЫЕ НОВЕЛЛЫ (СЦЕНАРИЙ)
+// ==========================================
 const slides = [
     {
         speaker: "ПУШИЦА",
@@ -66,60 +74,93 @@ const slides = [
         speaker: "",
         text: "Свет сияния постепенно тускнеет. Чистотел открывает глаза - перед ним настоящий снег и ночное небо. А рядом, на снегу, сидит Пушица. Он улыбается, сон и явь слились в одно мгновение",
         bg: "img/eyes_bg.jpg",
-        isCG: true,
+        isCG: true, // Флаг: это специальная картинка
         showLeft: false,
         showRight: false
     }
 ];
 
-// --- 3. ЛОГИКА ---
+
+// ==========================================
+// 3. ЛОГИКА НОВЕЛЛЫ
+// ==========================================
 let currentSlide = 0;
+
+// Экраны
 const menuScreen = document.getElementById('menu-screen');
 const novelScreen = document.getElementById('novel-screen');
 const gameScreen = document.getElementById('game-screen');
 
+// Элементы новеллы
 const bgLayer = document.getElementById('novel-bg');
 const cgLayer = document.getElementById('cg-layer');
 const charLeft = document.getElementById('char-left');
 const charRight = document.getElementById('char-right');
 const speakerName = document.getElementById('speaker-name');
 const speechText = document.getElementById('speech-text');
-const dialogueBox = document.getElementById('dialogue-box'); // Теперь это text-block
+const dialogueBox = document.getElementById('dialogue-box');
 
+// --- Старт из Меню ---
 document.getElementById('start-btn').addEventListener('click', () => {
     menuScreen.classList.remove('active');
     novelScreen.classList.add('active');
     renderSlide(0);
 });
 
+// --- Клик по Диалогу (Переход дальше) ---
 dialogueBox.addEventListener('click', () => {
+    // ПРОВЕРКА: Если это последний слайд (с глазами)
+    if (currentSlide === slides.length - 1) {
+        
+        // 1. Запускаем анимацию затемнения
+        cgLayer.classList.remove('visible'); // Убираем видимость (начинает исчезать)
+        cgLayer.classList.add('fading-out'); // Добавляем класс для затемнения
+        
+        // 2. Ждем 1.5 секунды (время анимации в CSS), потом переключаем на игру
+        setTimeout(() => {
+            startMiniGame();
+        }, 1500);
+        
+        return; // Останавливаем выполнение, чтобы не сработал код ниже
+    }
+
+    // Обычный переход к следующему слайду
     currentSlide++;
     if (currentSlide < slides.length) {
         renderSlide(currentSlide);
-    } else {
-        startMiniGame();
     }
 });
 
+// --- Функция отрисовки слайда ---
 function renderSlide(index) {
     const data = slides[index];
     
     // Текст
-    speakerName.innerText = data.speaker; // Если имя пустое, блок схлопнется (почти)
+    speakerName.innerText = data.speaker;
     speechText.innerText = data.text;
     
-    // ФОН и CG
+    // ЛОГИКА ФОНА И CG (Картинки с глазами)
     if (data.isCG) {
+        // Устанавливаем картинку
         cgLayer.src = data.bg;
         cgLayer.classList.remove('hidden');
-        bgLayer.style.opacity = 0;
+        
+        // Небольшая задержка, чтобы браузер успел отрисовать, а потом плавно показал
+        setTimeout(() => {
+            cgLayer.classList.add('visible'); // Плавное появление (opacity 0 -> 1)
+        }, 50);
+        
+        bgLayer.style.opacity = 0; // Скрываем обычный фон
     } else {
+        // Обычный слайд
+        cgLayer.classList.remove('visible');
         cgLayer.classList.add('hidden');
+        
         bgLayer.style.opacity = 1;
         bgLayer.style.backgroundImage = `url('${data.bg}')`;
     }
     
-    // ПЕРСОНАЖИ
+    // ЛОГИКА ПЕРСОНАЖЕЙ
     const leftIsVisible = data.showLeft;
     const rightIsVisible = data.showRight;
     
@@ -129,6 +170,7 @@ function renderSlide(index) {
     if (rightIsVisible) charRight.classList.remove('hidden');
     else charRight.classList.add('hidden');
 
+    // Центрирование (если персонаж один)
     const container = document.querySelector('.characters-container');
     if ((leftIsVisible && !rightIsVisible) || (!leftIsVisible && rightIsVisible)) {
         container.classList.add('solo-mode');
@@ -137,25 +179,33 @@ function renderSlide(index) {
     }
 }
 
-// --- 4. ИГРА ---
-function startMiniGame() {
-    novelScreen.classList.remove('active');
-    gameScreen.classList.add('active');
-    
-    // СТРАХОВКА: Насильно прячем результат и показываем ленту при старте
-    document.getElementById('result-display').classList.add('hidden');
-    document.getElementById('reel-window').classList.remove('hidden');
-}
 
+// ==========================================
+// 4. ЛОГИКА МИНИ-ИГРЫ
+// ==========================================
 let clickCount = 0;
 const gachaBtn = document.getElementById('gacha-btn');
 const reelWindow = document.getElementById('reel-window');
 const resultDisplay = document.getElementById('result-display');
+const controls = document.getElementById('gacha-controls');
 
+function startMiniGame() {
+    novelScreen.classList.remove('active');
+    gameScreen.classList.add('active');
+    
+    // СТРАХОВКА: Принудительно прячем результат и показываем ленту при старте
+    // Чтобы не было накладок, если вдруг CSS не сработал
+    resultDisplay.classList.add('hidden');
+    reelWindow.classList.remove('hidden');
+}
+
+// Клик по кнопке "Крутить"
 gachaBtn.addEventListener('click', () => {
     if (clickCount >= 3) return;
 
     clickCount++;
+    
+    // Эффект нажатия (кнопка чуть уменьшается)
     gachaBtn.style.transform = "scale(0.9)";
     setTimeout(()=> gachaBtn.style.transform = "scale(1)", 100);
 
@@ -165,29 +215,27 @@ gachaBtn.addEventListener('click', () => {
 });
 
 function runGachaSequence() {
-    const controls = document.getElementById('gacha-controls');
-    const reel = document.getElementById('reel-window');
-    const result = document.getElementById('result-display');
-
-    // 1. Убираем кнопку
+    // 1. Убираем кнопку управления
     controls.style.opacity = '0';
     gachaBtn.style.cursor = 'default';
     
     // 2. ГАРАНТИЯ: Лента видна, Результат скрыт
-    reel.classList.remove('hidden');
-    result.classList.add('hidden'); // Прячем кота, если он вдруг вылез
+    reelWindow.classList.remove('hidden');
+    resultDisplay.classList.add('hidden'); 
     
-    // 3. Запускаем анимацию
-    reel.classList.add('spinning');
+    // 3. Запускаем анимацию вращения
+    reelWindow.classList.add('spinning');
     
-    // 4. Через 2.5 секунды меняем местами
+    // 4. Ждем 2.5 секунды
     setTimeout(() => {
-        // Резко скрываем ленту
-        reel.classList.add('hidden');
-        reel.classList.remove('spinning');
+        // РЕЗКАЯ СМЕНА (чтобы избежать накладок)
         
-        // Резко показываем результат
-        result.classList.remove('hidden');
+        // Прячем ленту
+        reelWindow.classList.add('hidden');
+        reelWindow.classList.remove('spinning');
+        
+        // Показываем результат (запустится анимация фейерверка в CSS)
+        resultDisplay.classList.remove('hidden');
         
     }, 2500);
 }

@@ -530,3 +530,117 @@ body {
 .p6 { --dir: translate(0px, 150px); }
 .p7 { --dir: translate(-100px, 100px); }
 .p8 { --dir: translate(-150px, 0px); }
+
+
+/* =========================================
+   1. ОЖИВЛЕНИЕ ПЕРСОНАЖЕЙ (АНИМАЦИИ)
+   ========================================= */
+
+/* Легкое дыхание для персонажей */
+.character {
+    /* Добавляем анимацию дыхания */
+    animation: breathe 3s ease-in-out infinite;
+    transform-origin: bottom center;
+}
+
+/* Пушица (дух) может парить чуть активнее */
+#char-right {
+    animation: floatGhost 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.02) translateY(-5px); } /* Чуть увеличивается и всплывает */
+}
+
+@keyframes floatGhost {
+    0%, 100% { transform: translateY(0) scale(1); filter: brightness(1); }
+    50% { transform: translateY(-15px) scale(1.02); filter: brightness(1.2); } /* Сильнее плавает и светится */
+}
+
+/* Плавное появление/затухание для ГЛАЗ (CG) */
+.cg-image {
+    transition: opacity 1.5s ease-in-out; /* Медленное проявление (1.5 сек) */
+    opacity: 0;
+}
+.cg-image.visible {
+    opacity: 1; /* Полная видимость */
+}
+.cg-image.fading-out {
+    opacity: 0; /* Уход в затемнение */
+    filter: brightness(0.5); /* Дополнительно темнеет */
+}
+
+
+/* =========================================
+   2. МОБИЛЬНАЯ АДАПТАЦИЯ (САМОЕ СТРАШНОЕ)
+   ========================================= */
+
+/* Этот блок срабатывает ТОЛЬКО на телефонах (ширина меньше 768px) */
+@media (max-width: 768px) {
+
+    /* --- МЕНЮ --- */
+    .main-title {
+        font-size: 1.8rem; /* Уменьшаем заголовок */
+        padding: 0 20px;
+    }
+    .ghost-btn {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+
+    /* --- НОВЕЛЛА --- */
+    /* Меняем пропорции: больше места картинке, меньше тексту */
+    .visual-block { flex: 60; } 
+    .text-block { 
+        flex: 40; 
+        padding: 15px; 
+    }
+    
+    .text-content {
+        font-size: 0.95rem; /* Текст чуть мельче */
+    }
+    
+    .characters-container {
+        align-items: flex-end; /* Прижимаем к низу картинки */
+    }
+    
+    .character {
+        height: 80%; /* Персонажи чуть меньше, чтобы влезали */
+        max-width: 45%; /* Чтобы не наезжали друг на друга */
+    }
+
+    /* --- ИГРА --- */
+    #game-screen {
+        background-size: cover; /* На телефоне лучше cover, чтобы не было черных полос сверху/снизу */
+        background-position: center bottom;
+    }
+
+    /* Масштабируем сцену результата */
+    #result-display {
+        width: 100%;
+        transform: translateY(-20%) scale(0.7); /* Уменьшаем всю сцену с котами до 70% */
+        gap: 10px; /* Ближе друг к другу */
+    }
+    
+    .main-prize {
+        width: 200px; height: 200px; /* Уменьшаем контейнер приза */
+    }
+    .winner-img {
+        height: 200px; /* Уменьшаем кота */
+    }
+    .god-rays {
+        width: 300px; height: 300px; /* Уменьшаем лучи */
+    }
+    
+    /* Боковые персонажи */
+    .side-char img {
+        height: 100px;
+    }
+    
+    /* Опускаем кнопку ниже */
+    .gacha-controls {
+        margin-bottom: 20px;
+        transform: scale(0.9);
+    }
+}
