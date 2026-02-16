@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История Сна</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- === ЭКРАН 1: МЕНЮ === -->
+    <section id="menu-screen" class="screen active">
+        <!-- Фон с пузырьками -->
+        <div class="bubbles-container" id="bubbles"></div>
+        
+        <div class="menu-content">
+            <!-- Заголовок можно убрать, если он есть на картинке фона, 
+                 но я оставлю его скрытым или аккуратным -->
+            <h1 class="main-title">История одного сна</h1>
+            <button id="start-btn" class="ghost-btn">Приподнять занавес</button>
+        </div>
+    </section>
+
+    <!-- === ЭКРАН 2: НОВЕЛЛА (Стиль "Кинолента") === -->
+    <section id="novel-screen" class="screen">
+        
+        <!-- ВЕРХНЯЯ ЧАСТЬ: ВИЗУАЛ -->
+        <div class="visual-block">
+            <!-- Фон сцены -->
+            <div class="background-layer" id="novel-bg"></div>
+            
+            <!-- Слой для CG (Глаза) -->
+            <img id="cg-layer" class="cg-image hidden" src="" alt="CG">
+            
+            <!-- Персонажи -->
+            <div class="characters-container">
+                <img src="img/chistotel.png" id="char-left" class="character hidden">
+                <img src="img/pushitsa.png" id="char-right" class="character hidden">
+            </div>
+        </div>
+
+        <!-- НИЖНЯЯ ЧАСТЬ: ТЕКСТ -->
+        <div class="text-block" id="dialogue-box">
+            <!-- Имя (сделаем маленьким и аккуратным) -->
+            <div class="name-tag" id="speaker-name"></div>
+            
+            <!-- Текст -->
+            <p class="text-content" id="speech-text">...</p>
+            
+            <!-- Стрелки навигации по центру -->
+            <div class="nav-arrows">
+                <span><<</span>
+                <span class="active-arrow">>></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- === ЭКРАН 3: ИГРА === -->
+    <section id="game-screen" class="screen">
+        <div class="game-stage">
+            
+            <div class="reel-window" id="reel-window">
+                <div class="reel-strip" id="reel-strip">
+                    <img src="img/funny_char_1.png">
+                    <img src="img/funny_char_2.png">
+                    <img src="img/funny_char_1.png">
+                    <img src="img/funny_char_2.png">
+                    <img src="img/funny_char_1.png">
+                    <img src="img/funny_char_2.png">
+                </div>
+            </div>
+
+            <div id="result-display" class="hidden">
+                <div class="side-char left-char">
+                    <img src="img/funny_char_1.png" alt="Blue">
+                </div>
+                
+                <div class="main-prize">
+                    <!-- ВЫПАВШИЙ ПЕРСОНАЖ -->
+                    <img src="img/result_cat.png" alt="Winner">
+                    
+                    <!-- НОВОЕ: КОНТЕЙНЕР ДЛЯ ФЕЙЕРВЕРКА -->
+                    <div class="fireworks-effect">
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                        <div class="spark"></div>
+                    </div>
+                </div>
+
+                <div class="side-char right-char">
+                    <img src="img/funny_char_2.png" alt="Yellow">
+                </div>
+            </div>
+            <!-- ... -->
+
+            <div id="result-display" class="hidden">
+                <div class="side-char left-char">
+                    <img src="img/funny_char_1.png" alt="Blue">
+                </div>
+                <div class="main-prize">
+                    <img src="img/result_cat.png" alt="Winner">
+                </div>
+                <div class="side-char right-char">
+                    <img src="img/funny_char_2.png" alt="Yellow">
+                </div>
+            </div>
+
+            <div class="gacha-controls" id="gacha-controls">
+                <button id="gacha-btn" class="bounce-btn">
+                    <img src="img/gacha_btn.png" alt="Крутка">
+                </button>
+                <div class="btn-label">Сделать Крутку</div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
